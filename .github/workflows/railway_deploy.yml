@@ -1,0 +1,19 @@
+name: 🚃 Railway Deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: 🚃 Railway Deploy
+      - name: 🚢 Deploy to Railway
+        run: |
+          npm install -g @railway/cli
+          railway up --detach
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
