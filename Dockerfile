@@ -6,6 +6,9 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . .
 
+# Create storage and bootstrap cache directories
+RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
+
 # Install composer dependencies
 RUN composer install --no-dev --optimize-autoloader
 
