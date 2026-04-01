@@ -44,7 +44,9 @@ async function networkFirst(request) {
         }
         return networkResponse;
     } catch (error) {
-        return caches.match(request);
+        console.warn('Network fetch failed, serving from cache:', error);
+        const cachedResponse = await caches.match(request);
+        return cachedResponse || Response.error();
     }
 }
 

@@ -5,12 +5,12 @@
 
 app = 'eduteller-portal'
 primary_region = 'jnb'
-
 [build]
   dockerfile = 'Dockerfile'
 
 [env]
   APP_ENV = 'production'
+  APP_URL = 'https://eduteller-portal.fly.dev'
   CACHE_DRIVER = 'redis'
   DB_CONNECTION = 'pgsql'
   LOG_CHANNEL = 'stderr'
@@ -22,7 +22,7 @@ primary_region = 'jnb'
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1
   processes = ['app']
 
 [[vm]]
