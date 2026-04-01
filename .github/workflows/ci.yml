@@ -1,0 +1,39 @@
+name: Eduteller DevSecOps CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+        coverage: none
+
+    - name: Install Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+    - name: Run Static Analysis (PHPStan)
+      run: ./vendor/bin/phpstan analyze
+
+    - name: Execute Tests (PHPUnit/Pest)
+      run: php artisan test
+
+    - name: Security Audit
+      run: composer audit
+
+  deployment:
+    needs: laravel-tests
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to Cloud (Laravel Forge/Vapor)
+      run: echo "Initiating Zero-Downtime Deployment..."
